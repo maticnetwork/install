@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, edited, synchronize]
+
+jobs:
+  install_aarch64:
+    runs-on: ubuntu-latest
+    name: Install on ${{ matrix.distro }} ${{ matrix.arch }}
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            distro: ubuntu_latest
+          - arch: aarch64
+            distro: alpine_latest
+          - arch: aarch64
+            distro: fedora_latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: uraimo/run-on-arch-action@v2
+        name: Install binary
+        with:
+          arch: ${{ matrix.arch }}
+          distro: ${{ matrix.distro }}
+
+          install: |
+            case "${{ matrix.distro }}" in
+              ubuntu*|jessie|stretch|buster|bullseye)
+                apt-get update -q -y
+                apt-get install -q -y wget sudo bash
+                ;;
+              fedora*)
+                dnf -y update
+                dnf -y install wget sudo bash
+                ;;
+              alpine*)
+                apk update
+                apk add wget sudo bash
+                ;;
+            esac
+
+          # Mount the root directory as /artifacts in the container
+          dockerRunArgs: |
+            --volume "${PWD}:/artifacts"
+
+          run: |
+            bash /artifacts/bor.sh
+            bash /artifacts/bor.sh 0.2.14
+            bash /artifacts/heimdall.sh
+            bash /artifacts/heimdall.sh 0.2.9
+
+  install_amd64:
+    runs-on: ${{ matrix.os }}
+    name: Install on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install binary
+        run: |
+          ./bor.sh
+          ./bor.sh 0.2.14
+          ./heimdall.sh
+          ./heimdall.sh 0.2.9
