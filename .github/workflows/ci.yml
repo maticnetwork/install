@@ -51,7 +51,7 @@ jobs:
 
           run: |
             bash /artifacts/bor.sh
-            bash /artifacts/bor.sh 0.2.14
+            bash /artifacts/bor.sh 0.2.14-tmp-span-hotfix
             bash /artifacts/heimdall.sh
             bash /artifacts/heimdall.sh 0.2.9
 
@@ -67,6 +67,6 @@ jobs:
       - name: Install binary
         run: |
           ./bor.sh
-          ./bor.sh 0.2.14
+          ./bor.sh 0.2.14-tmp-span-hotfix
           ./heimdall.sh
           ./heimdall.sh 0.2.9

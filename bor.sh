@@ -21,7 +21,7 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-version="0.2.14"
+version="0.2.14-tmp-span-hotfix"
 
 if [ ! -z "$1" ]; then
     version="$1"
