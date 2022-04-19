@@ -24,7 +24,7 @@ cd install
 Simply pass the version tag as the first argument to the installation script. Notice that the script will overwrite existing bor binaries if they exist. Example:
 
 ```
-./bor.sh 0.2.14
+./bor.sh 0.2.14-tmp-span-hotfix
 ```
 
 
