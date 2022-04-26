@@ -22,6 +22,7 @@ require_util() {
 }
 
 version="0.2.9"
+newCLIVersion="0.3.0"
 
 if [ ! -z "$1" ]; then
     version="$1"
@@ -98,7 +99,9 @@ if [ $type = "tar.gz" ]; then
     tar -xzf "$package" -C "$unpack" || oops "failed to unpack '$package'"
     sudo cp "${unpack}/heimdalld" /usr/local/bin/heimdalld || oops "failed to copy heimdalld binary to '/usr/local/bin/heimdalld'"
     sudo cp "${unpack}/heimdallcli" /usr/local/bin/heimdallcli || oops "failed to copy heimdallcli binary to '/usr/local/bin/heimdallcli'"
-    sudo cp "${unpack}/bridge" /usr/local/bin/bridge || oops "failed to copy bridge binary to '/usr/local/bin/bridge'"
+    if [ "$version" \< "$newCLIVersion" ]; then
+        sudo cp "${unpack}/bridge" /usr/local/bin/bridge || oops "failed to copy bridge binary to '/usr/local/bin/bridge'"
+    fi
 elif [ $type = "deb" ]; then
     echo "Installing $package ..."
     sudo dpkg -i $package
@@ -110,12 +113,18 @@ elif [ $type = "apk" ]; then
     sudo apk add --allow-untrusted $package
 fi
 
+if [ "$version" \< "$newCLIVersion" ]; then
+    echo "Checking bridge version ..."
+    bridge version || oops "something went wrong"
+else
+    # Need to initiate heimdall config in new cli
+    heimdalld init
+fi
 echo "Checking heimdalld version ..."
 heimdalld version || oops "something went wrong"
 echo "Checking heimdallcli version ..."
 heimdallcli version || oops "something went wrong"
-echo "Checking bridge version ..."
-bridge version || oops "something went wrong"
+
 echo "heimdall has been installed successfully!"
 
 } # End of wrapping

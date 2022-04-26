@@ -53,7 +53,7 @@ jobs:
             bash /artifacts/bor.sh
             bash /artifacts/bor.sh 0.2.14-tmp-span-hotfix
             bash /artifacts/heimdall.sh
-            bash /artifacts/heimdall.sh 0.2.9
+            bash /artifacts/heimdall.sh 0.3.0-beta1
 
   install_amd64:
     runs-on: ${{ matrix.os }}
@@ -69,4 +69,4 @@ jobs:
           ./bor.sh
           ./bor.sh 0.2.14-tmp-span-hotfix
           ./heimdall.sh
-          ./heimdall.sh 0.2.9
+          ./heimdall.sh 0.3.0-beta1
