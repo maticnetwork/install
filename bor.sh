@@ -21,13 +21,63 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-version="0.2.14-tmp-span-hotfix"
+version="0.2.17"
+network="mainnet"
+nodetype="sentry"
+
+
+# Help function -h
+helpFunction()
+{
+    echo ""
+    echo "Usage: $0 [version [network [nodetype]]]"
+    echo -e "\tversion: Version of Heimdall to install. Default: $version"
+    echo -e "\tnetwork: Network to install. Default: $network"
+    echo -e "\tnodetype: Type of node configuration to install. Default: $nodetype"
+    exit 1 # Exit script after printing help
+}
+
+while getopts ":h" option; do
+   case $option in
+      h) # display Help
+         helpFunction
+         exit;;
+     \?) # Invalid option
+         echo "Error: Invalid option"
+         exit;;
+   esac
+done
 
 if [ ! -z "$1" ]; then
     version="$1"
     if [ "${version:0:1}" = "v" ]; then
         version=${version:1}
     fi
+fi
+
+if [ ! -z "$2" ]; then
+    if [ "$2" = "mainnet" ] || [ "$2" = "mumbai" ]; then
+        network="$2"
+    else
+        echo "Invalid network: $2, choose from 'mainnet' or 'mumbai'"
+        exit 1
+    fi
+fi
+
+if [ ! -z "$3" ]; then
+    if [ "$3" = "sentry" ] || [ "$3" = "validator" ]; then
+        nodetype="$3"
+    else
+        echo "Invalid node type: $3, choose from 'sentry' or 'validator'"
+        exit 1
+    fi
+fi
+
+if [[ $version > "0.3" ]]; then
+    tag=${version}_${network}_${nodetype}
+else
+    echo "Version is less than 0.3, ignoring network and node type"
+    tag=${version}
 fi
 
 baseUrl="https://github.com/maticnetwork/bor/releases/download/v${version}"
@@ -38,31 +88,31 @@ case "$(uname -s).$(uname -m)" in
     Linux.x86_64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${version}_linux_amd64.deb"
+            binary="bor_${tag}_linux_amd64.deb"
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${version}_linux_x86_64.rpm"
+            binary="bor_${tag}_linux_x86_64.rpm"
         elif command -v apk &> /dev/null; then
             type="apk"
-            binary="bor_${version}_linux_amd64.apk"
+            binary="bor_${tag}_linux_amd64.apk"
         else
             type="tar.gz"
-            binary="bor_${version}_linux_amd64.tar.gz"
+            binary="bor_${tag}_linux_amd64.tar.gz"
         fi
         ;;
     Linux.aarch64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${version}_linux_arm64.deb"
+            binary="bor_${tag}_linux_arm64.deb"
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${version}_linux_arm64.rpm"
+            binary="bor_${tag}_linux_arm64.rpm"
         elif command -v apk &> /dev/null; then
             type="apk"
-            binary="bor_${version}_linux_arm64.apk"
+            binary="bor_${tag}_linux_arm64.apk"
         else
             type="tar.gz"
-            binary="bor_${version}_linux_arm64.tar.gz"
+            binary="bor_${tag}_linux_arm64.tar.gz"
         fi
         ;;
     Darwin.x86_64)
