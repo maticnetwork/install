@@ -74,7 +74,8 @@ if [ ! -z "$3" ]; then
 fi
 
 if [[ $version > "0.3" ]]; then
-    tag=${version}_${network}_${nodetype}
+    tag=${version}
+    profileInfo=${version}_${network}_${nodetype}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -88,10 +89,12 @@ case "$(uname -s).$(uname -m)" in
     Linux.x86_64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${tag}_linux_amd64.deb"
+            binary="bor_${tag}_amd64.deb"
+            profile="bor_profile_${profileInfo}_amd64.deb"
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${tag}_linux_x86_64.rpm"
+            binary="bor_${tag}_amd64.rpm"
+            profile="bor_profile_${profileInfo}_amd64.rpm"
         elif command -v apk &> /dev/null; then
             type="apk"
             binary="bor_${tag}_linux_amd64.apk"
@@ -103,10 +106,12 @@ case "$(uname -s).$(uname -m)" in
     Linux.aarch64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${tag}_linux_arm64.deb"
+            binary="bor_${tag}_arm64.deb"
+            profile="bor_profile_${profileInfo}_arm64.deb"
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${tag}_linux_arm64.rpm"
+            binary="bor_${tag}_arm64.rpm"
+            profile="bor_profile_${profileInfo}_arm64.rpm"
         elif command -v apk &> /dev/null; then
             type="apk"
             binary="bor_${tag}_linux_arm64.apk"
@@ -141,6 +146,15 @@ fi
 echo "downloading bor binary package for $system from '$url' to '$tmpDir'..."
 fetch "$url" "$package" || oops "failed to download '$url'"
 
+# Check if profile is not empty
+if [ ! -z "$profile" ]; then
+    profileUrl="${baseUrl}/${profile}"
+    profilePackage=$tmpDir/$profile
+
+    echo "downloading bor profile package for $system from '$profileUrl' to '$tmpDir'..."
+    fetch "$profileUrl" "$profilePackage" || oops "failed to download '$profileUrl'"
+fi
+
 if [ $type = "tar.gz" ]; then
     require_util tar "unpack the binary package"
     unpack=$tmpDir/unpack
@@ -150,9 +164,11 @@ if [ $type = "tar.gz" ]; then
 elif [ $type = "deb" ]; then
     echo "Installing $package ..."
     sudo dpkg -i $package
+    sudo dpkg -i $profilePackage
 elif [ $type = "rpm" ]; then
     echo "Installing $package ..."
     sudo rpm -i --force $package
+    sudo rpm -i --force $profilePackage
 elif [ $type = "apk" ]; then
     echo "Installing $package ..."
     sudo apk add --allow-untrusted $package
