@@ -1,6 +1,7 @@
 #!/bin/bash
 
 { # Prevent execution if this script was only partially downloaded
+set -e
 
 oops() {
     echo "$0:" "$@" >&2
@@ -89,12 +90,20 @@ case "$(uname -s).$(uname -m)" in
     Linux.x86_64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${tag}_amd64.deb"
-            profile="bor_profile_${profileInfo}_amd64.deb"
+            if [[ $version > "0.3" ]]; then
+                binary="bor_${tag}_amd64.deb"
+                profile="bor_profile_${profileInfo}_amd64.deb"
+            else
+                binary="bor_${tag}_linux_amd64.deb"
+            fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${tag}_amd64.rpm"
-            profile="bor_profile_${profileInfo}_amd64.rpm"
+            if [[ $version > "0.3" ]]; then
+                binary="bor_${tag}_amd64.rpm"
+                profile="bor_profile_${profileInfo}_amd64.rpm"
+            else
+                binary="bor_${tag}_linux_amd64.rpm"
+            fi
         elif command -v apk &> /dev/null; then
             type="apk"
             binary="bor_${tag}_linux_amd64.apk"
@@ -106,12 +115,20 @@ case "$(uname -s).$(uname -m)" in
     Linux.aarch64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${tag}_arm64.deb"
-            profile="bor_profile_${profileInfo}_arm64.deb"
+            if [[ $version > "0.3" ]]; then
+                binary="bor_${tag}_arm64.deb"
+                profile="bor_profile_${profileInfo}_arm64.deb"
+            else
+                binary="bor_${tag}_linux_arm64.deb"
+            fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${tag}_arm64.rpm"
-            profile="bor_profile_${profileInfo}_arm64.rpm"
+            if [[ $version > "0.3" ]]; then
+                binary="bor_${tag}_arm64.rpm"
+                profile="bor_profile_${profileInfo}_arm64.rpm"
+            else
+                binary="bor_${tag}_linux_arm64.rpm"
+            fi
         elif command -v apk &> /dev/null; then
             type="apk"
             binary="bor_${tag}_linux_arm64.apk"
@@ -147,7 +164,7 @@ echo "downloading bor binary package for $system from '$url' to '$tmpDir'..."
 fetch "$url" "$package" || oops "failed to download '$url'"
 
 # Check if profile is not empty
-if [ ! -z "$profile" ]; then
+if [ ! -z "$profile" ] && [[ "$version" > "0.3" ]]; then
     profileUrl="${baseUrl}/${profile}"
     profilePackage=$tmpDir/$profile
 
@@ -164,11 +181,15 @@ if [ $type = "tar.gz" ]; then
 elif [ $type = "deb" ]; then
     echo "Installing $package ..."
     sudo dpkg -i $package
-    sudo dpkg -i $profilePackage
+    if [ ! -z "$profilePackage" ]; then
+        sudo dpkg -i $profilePackage
+    fi
 elif [ $type = "rpm" ]; then
     echo "Installing $package ..."
     sudo rpm -i --force $package
-    sudo rpm -i --force $profilePackage
+    if [ ! -z "$profilePackage" ]; then
+        sudo rpm -i --force $profilePackage
+    fi
 elif [ $type = "apk" ]; then
     echo "Installing $package ..."
     sudo apk add --allow-untrusted $package
