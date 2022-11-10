@@ -75,8 +75,8 @@ if [ ! -z "$3" ]; then
 fi
 
 if [[ $version > "0.3" ]]; then
-    tag=${version}
-    profileInfo=${version}_${network}_${nodetype}
+    tag=v${version}
+    profileInfo=v${version}_${network}_${nodetype}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -92,7 +92,7 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="bor_${tag}_amd64.deb"
-                profile="bor_profile_${profileInfo}_amd64.deb"
+                profile="bor_${profileInfo}_profile_amd64.deb"
             else
                 binary="bor_${tag}_linux_amd64.deb"
             fi
@@ -100,14 +100,20 @@ case "$(uname -s).$(uname -m)" in
             type="rpm"
             if [[ $version > "0.3" ]]; then
                 binary="bor_${tag}_amd64.rpm"
-                profile="bor_profile_${profileInfo}_amd64.rpm"
+                profile="bor_${profileInfo}_profile_amd64.rpm"
             else
                 binary="bor_${tag}_linux_amd64.rpm"
             fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="bor_${tag}_linux_amd64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="bor_${tag}_linux_amd64.tar.gz"
         fi
@@ -117,7 +123,7 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="bor_${tag}_arm64.deb"
-                profile="bor_profile_${profileInfo}_arm64.deb"
+                profile="bor_${profileInfo}_profile_arm64.deb"
             else
                 binary="bor_${tag}_linux_arm64.deb"
             fi
@@ -125,23 +131,35 @@ case "$(uname -s).$(uname -m)" in
             type="rpm"
             if [[ $version > "0.3" ]]; then
                 binary="bor_${tag}_arm64.rpm"
-                profile="bor_profile_${profileInfo}_arm64.rpm"
+                profile="bor_${profileInfo}_profile_arm64.rpm"
             else
                 binary="bor_${tag}_linux_arm64.rpm"
             fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="bor_${tag}_linux_arm64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="bor_${tag}_linux_arm64.tar.gz"
         fi
         ;;
     Darwin.x86_64)
+        if [[ $version > "0.3" ]]; then
+            oops "sorry, there is no binary distribution for your platform"
+        fi
         type="tar.gz"
         binary="bor_${version}_darwin_amd64.tar.gz"
         ;;
     Darwin.arm64|Darwin.aarch64)
+        if [[ $version > "0.3" ]]; then
+            oops "sorry, there is no binary distribution for your platform"
+        fi
         type="tar.gz"
         binary="bor_${version}_darwin_arm64.tar.gz"
         ;;

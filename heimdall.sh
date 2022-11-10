@@ -93,7 +93,7 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="heimdall_${tag}_amd64.deb"
-                profile="heimdall_profile_${profileInfo}_amd64.deb"
+                profile="heimdall_${profileInfo}_profile_amd64.deb"
             else
                 binary="heimdall_${tag}_linux_amd64.deb"
             fi
@@ -101,14 +101,20 @@ case "$(uname -s).$(uname -m)" in
             type="rpm"
             if [[ $version > "0.3" ]]; then
                 binary="heimdall_${tag}_amd64.rpm"
-                profile="heimdall_profile_${profileInfo}_amd64.rpm"
+                profile="heimdall_${profileInfo}_profile_amd64.rpm"
             else
                 binary="heimdall_${tag}_linux_amd64.rpm"
             fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="heimdall_${tag}_linux_amd64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="heimdall_${tag}_linux_amd64.tar.gz"
         fi
@@ -118,7 +124,7 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="heimdall_${tag}_arm64.deb"
-                profile="heimdall_profile_${profileInfo}_arm64.deb"
+                profile="heimdall_${profileInfo}_profile_arm64.deb"
             else
                 binary="heimdall_${tag}_linux_arm64.deb"
             fi
@@ -126,23 +132,35 @@ case "$(uname -s).$(uname -m)" in
             type="rpm"
             if [[ $version > "0.3" ]]; then
                 binary="heimdall_${tag}_arm64.rpm"
-                profile="heimdall_profile_${profileInfo}_arm64.rpm"
+                profile="heimdall_${profileInfo}_profile_arm64.rpm"
             else
                 binary="heimdall_${tag}_linux_arm64.rpm"
             fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="heimdall_${tag}_linux_arm64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="heimdall_${tag}_linux_arm64.tar.gz"
         fi
         ;;
     Darwin.x86_64)
+        if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
         type="tar.gz"
         binary="heimdall_${tag}_darwin_amd64.tar.gz"
         ;;
     Darwin.arm64|Darwin.aarch64)
+        if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
         type="tar.gz"
         binary="heimdall_${tag}_darwin_arm64.tar.gz"
         ;;
