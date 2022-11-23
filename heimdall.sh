@@ -67,10 +67,10 @@ if [ ! -z "$2" ]; then
 fi
 
 if [ ! -z "$3" ]; then
-    if [ "$3" = "sentry" ] || [ "$3" = "validator" ] || [ "$3" = "archive" ]; then
+    if [ "$3" = "sentry" ] || [ "$3" = "validator" ]; then
         nodetype="$3"
     else
-        echo "Invalid node type: $3, choose from 'sentry', 'validator' or 'archive'"
+        echo "Invalid node type: $3, choose from 'sentry' or 'validator'"
         exit 1
     fi
 fi
