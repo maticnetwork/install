@@ -1,6 +1,7 @@
 #!/bin/bash
 
 { # Prevent execution if this script was only partially downloaded
+set -e
 
 oops() {
     echo "$0:" "$@" >&2
@@ -65,16 +66,17 @@ if [ ! -z "$2" ]; then
 fi
 
 if [ ! -z "$3" ]; then
-    if [ "$3" = "sentry" ] || [ "$3" = "validator" ]; then
+    if [ "$3" = "sentry" ] || [ "$3" = "validator" ] || [ "$3" = "archive" ]; then
         nodetype="$3"
     else
-        echo "Invalid node type: $3, choose from 'sentry' or 'validator'"
+        echo "Invalid node type: $3, choose from 'sentry', 'validator' or 'archive'"
         exit 1
     fi
 fi
 
 if [[ $version > "0.3" ]]; then
-    tag=${version}_${network}_${nodetype}
+    tag=v${version}
+    profileInfo=${network}-${nodetype}-config_v${version}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -88,14 +90,30 @@ case "$(uname -s).$(uname -m)" in
     Linux.x86_64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${tag}_linux_amd64.deb"
+            if [[ $version > "0.3" ]]; then
+                binary="bor-${tag}-amd64.deb"
+                profile="bor-${profileInfo}-amd64.deb"
+            else
+                binary="bor_${tag}_linux_amd64.deb"
+            fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${tag}_linux_x86_64.rpm"
+            if [[ $version > "0.3" ]]; then
+                binary="bor-${tag}-amd64.rpm"
+                profile="bor-${profileInfo}-amd64.rpm"
+            else
+                binary="bor_${tag}_linux_amd64.rpm"
+            fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="bor_${tag}_linux_amd64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="bor_${tag}_linux_amd64.tar.gz"
         fi
@@ -103,23 +121,45 @@ case "$(uname -s).$(uname -m)" in
     Linux.aarch64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="bor_${tag}_linux_arm64.deb"
+            if [[ $version > "0.3" ]]; then
+                binary="bor-${tag}-arm64.deb"
+                profile="bor-${profileInfo}-arm64.deb"
+            else
+                binary="bor_${tag}_linux_arm64.deb"
+            fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="bor_${tag}_linux_arm64.rpm"
+            if [[ $version > "0.3" ]]; then
+                binary="bor-${tag}-arm64.rpm"
+                profile="bor-${profileInfo}-arm64.rpm"
+            else
+                binary="bor_${tag}_linux_arm64.rpm"
+            fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="bor_${tag}_linux_arm64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="bor_${tag}_linux_arm64.tar.gz"
         fi
         ;;
     Darwin.x86_64)
+        if [[ $version > "0.3" ]]; then
+            oops "sorry, there is no binary distribution for your platform"
+        fi
         type="tar.gz"
         binary="bor_${version}_darwin_amd64.tar.gz"
         ;;
     Darwin.arm64|Darwin.aarch64)
+        if [[ $version > "0.3" ]]; then
+            oops "sorry, there is no binary distribution for your platform"
+        fi
         type="tar.gz"
         binary="bor_${version}_darwin_arm64.tar.gz"
         ;;
@@ -141,6 +181,15 @@ fi
 echo "downloading bor binary package for $system from '$url' to '$tmpDir'..."
 fetch "$url" "$package" || oops "failed to download '$url'"
 
+# Check if profile is not empty
+if [ ! -z "$profile" ] && [[ "$version" > "0.3" ]]; then
+    profileUrl="${baseUrl}/${profile}"
+    profilePackage=$tmpDir/$profile
+
+    echo "downloading bor profile package for $system from '$profileUrl' to '$tmpDir'..."
+    fetch "$profileUrl" "$profilePackage" || oops "failed to download '$profileUrl'"
+fi
+
 if [ $type = "tar.gz" ]; then
     require_util tar "unpack the binary package"
     unpack=$tmpDir/unpack
@@ -150,9 +199,15 @@ if [ $type = "tar.gz" ]; then
 elif [ $type = "deb" ]; then
     echo "Installing $package ..."
     sudo dpkg -i $package
+    if [ ! -z "$profilePackage" ]; then
+        sudo dpkg -i $profilePackage
+    fi
 elif [ $type = "rpm" ]; then
     echo "Installing $package ..."
     sudo rpm -i --force $package
+    if [ ! -z "$profilePackage" ]; then
+        sudo rpm -i --force $profilePackage
+    fi
 elif [ $type = "apk" ]; then
     echo "Installing $package ..."
     sudo apk add --allow-untrusted $package

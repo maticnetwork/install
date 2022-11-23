@@ -1,6 +1,7 @@
 #!/bin/bash
 
 { # Prevent execution if this script was only partially downloaded
+set -e
 
 oops() {
     echo "$0:" "$@" >&2
@@ -75,7 +76,8 @@ if [ ! -z "$3" ]; then
 fi
 
 if [[ $version > "0.3" ]]; then
-    tag=${version}_${network}_${nodetype}
+    tag=${version}
+    profileInfo=${network}-${nodetype}-config_v${version}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -89,14 +91,30 @@ case "$(uname -s).$(uname -m)" in
     Linux.x86_64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="heimdall_${tag}_linux_amd64.deb"
+            if [[ $version > "0.3" ]]; then
+                binary="heimdall-${tag}-amd64.deb"
+                profile="heimdall-${profileInfo}-amd64.deb"
+            else
+                binary="heimdall_${tag}_linux_amd64.deb"
+            fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="heimdall_${tag}_linux_x86_64.rpm"
+            if [[ $version > "0.3" ]]; then
+                binary="heimdall-${tag}-amd64.rpm"
+                profile="heimdall-${profileInfo}-amd64.rpm"
+            else
+                binary="heimdall_${tag}_linux_amd64.rpm"
+            fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="heimdall_${tag}_linux_amd64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="heimdall_${tag}_linux_amd64.tar.gz"
         fi
@@ -104,23 +122,45 @@ case "$(uname -s).$(uname -m)" in
     Linux.aarch64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            binary="heimdall_${tag}_linux_arm64.deb"
+            if [[ $version > "0.3" ]]; then
+                binary="heimdall-${tag}-arm64.deb"
+                profile="heimdall-${profileInfo}-arm64.deb"
+            else
+                binary="heimdall_${tag}_linux_arm64.deb"
+            fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            binary="heimdall_${tag}_linux_arm64.rpm"
+            if [[ $version > "0.3" ]]; then
+                binary="heimdall-${tag}-arm64.rpm"
+                profile="heimdall-${profileInfo}-arm64.rpm"
+            else
+                binary="heimdall_${tag}_linux_arm64.rpm"
+            fi
         elif command -v apk &> /dev/null; then
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="apk"
             binary="heimdall_${tag}_linux_arm64.apk"
         else
+            if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
             type="tar.gz"
             binary="heimdall_${tag}_linux_arm64.tar.gz"
         fi
         ;;
     Darwin.x86_64)
+        if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
         type="tar.gz"
         binary="heimdall_${tag}_darwin_amd64.tar.gz"
         ;;
     Darwin.arm64|Darwin.aarch64)
+        if [[ $version > "0.3" ]]; then
+                oops "sorry, there is no binary distribution for your platform"
+            fi
         type="tar.gz"
         binary="heimdall_${tag}_darwin_arm64.tar.gz"
         ;;
@@ -142,6 +182,15 @@ fi
 echo "downloading heimdall binary package for $system from '$url' to '$tmpDir'..."
 fetch "$url" "$package" || oops "failed to download '$url'"
 
+# Check if profile is not empty
+if [ ! -z "$profile"  ] && [[ "$version" > "0.3" ]]; then
+    profileUrl="${baseUrl}/${profile}"
+    profilePackage=$tmpDir/$profile
+
+    echo "downloading heimdall profile package for $system from '$profileUrl' to '$tmpDir'..."
+    fetch "$profileUrl" "$profilePackage" || oops "failed to download '$profileUrl'"
+fi
+
 if [ $type = "tar.gz" ]; then
     require_util tar "unpack the binary package"
     unpack=$tmpDir/unpack
@@ -155,9 +204,15 @@ if [ $type = "tar.gz" ]; then
 elif [ $type = "deb" ]; then
     echo "Installing $package ..."
     sudo dpkg -i $package
+    if [ ! -z "$profilePackage" ]; then
+        sudo dpkg -i $profilePackage
+    fi
 elif [ $type = "rpm" ]; then
     echo "Installing $package ..."
     sudo rpm -i --force $package
+    if [ ! -z "$profilePackage" ]; then
+        sudo rpm -i --force $profilePackage
+    fi
 elif [ $type = "apk" ]; then
     echo "Installing $package ..."
     sudo apk add --allow-untrusted $package
@@ -166,14 +221,9 @@ fi
 if [ "$version" \< "$newCLIVersion" ]; then
     echo "Checking bridge version ..."
     bridge version || oops "something went wrong"
-else
-    # Need to initiate heimdall config in new cli
-    heimdalld init
 fi
 echo "Checking heimdalld version ..."
 heimdalld version || oops "something went wrong"
-echo "Checking heimdallcli version ..."
-heimdallcli version || oops "something went wrong"
 
 echo "heimdall has been installed successfully!"
 
