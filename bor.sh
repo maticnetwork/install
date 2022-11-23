@@ -66,17 +66,17 @@ if [ ! -z "$2" ]; then
 fi
 
 if [ ! -z "$3" ]; then
-    if [ "$3" = "sentry" ] || [ "$3" = "validator" ]; then
+    if [ "$3" = "sentry" ] || [ "$3" = "validator" ] || [ "$3" = "archive" ]; then
         nodetype="$3"
     else
-        echo "Invalid node type: $3, choose from 'sentry' or 'validator'"
+        echo "Invalid node type: $3, choose from 'sentry', 'validator' or 'archive'"
         exit 1
     fi
 fi
 
 if [[ $version > "0.3" ]]; then
     tag=v${version}
-    profileInfo=v${version}_${network}_${nodetype}
+    profileInfo=${network}-${nodetype}-config_v${version}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -91,16 +91,16 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="bor_${tag}_amd64.deb"
-                profile="bor_${profileInfo}_profile_amd64.deb"
+                binary="bor-${tag}-amd64.deb"
+                profile="bor-${profileInfo}-amd64.deb"
             else
                 binary="bor_${tag}_linux_amd64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="bor_${tag}_amd64.rpm"
-                profile="bor_${profileInfo}_profile_amd64.rpm"
+                binary="bor-${tag}-amd64.rpm"
+                profile="bor-${profileInfo}-amd64.rpm"
             else
                 binary="bor_${tag}_linux_amd64.rpm"
             fi
@@ -122,16 +122,16 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="bor_${tag}_arm64.deb"
-                profile="bor_${profileInfo}_profile_arm64.deb"
+                binary="bor-${tag}-arm64.deb"
+                profile="bor-${profileInfo}-arm64.deb"
             else
                 binary="bor_${tag}_linux_arm64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="bor_${tag}_arm64.rpm"
-                profile="bor_${profileInfo}_profile_arm64.rpm"
+                binary="bor-${tag}-arm64.rpm"
+                profile="bor-${profileInfo}-arm64.rpm"
             else
                 binary="bor_${tag}_linux_arm64.rpm"
             fi

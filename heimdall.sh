@@ -67,17 +67,17 @@ if [ ! -z "$2" ]; then
 fi
 
 if [ ! -z "$3" ]; then
-    if [ "$3" = "sentry" ] || [ "$3" = "validator" ]; then
+    if [ "$3" = "sentry" ] || [ "$3" = "validator" ] || [ "$3" = "archive" ]; then
         nodetype="$3"
     else
-        echo "Invalid node type: $3, choose from 'sentry' or 'validator'"
+        echo "Invalid node type: $3, choose from 'sentry', 'validator' or 'archive'"
         exit 1
     fi
 fi
 
 if [[ $version > "0.3" ]]; then
     tag=${version}
-    profileInfo=${version}_${network}_${nodetype}
+    profileInfo=${network}-${nodetype}-config_v${version}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -92,16 +92,16 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdall_${tag}_amd64.deb"
-                profile="heimdall_${profileInfo}_profile_amd64.deb"
+                binary="heimdall-${tag}-amd64.deb"
+                profile="heimdall-${profileInfo}-amd64.deb"
             else
                 binary="heimdall_${tag}_linux_amd64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdall_${tag}_amd64.rpm"
-                profile="heimdall_${profileInfo}_profile_amd64.rpm"
+                binary="heimdall-${tag}-amd64.rpm"
+                profile="heimdall-${profileInfo}-amd64.rpm"
             else
                 binary="heimdall_${tag}_linux_amd64.rpm"
             fi
@@ -123,16 +123,16 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdall_${tag}_arm64.deb"
-                profile="heimdall_${profileInfo}_profile_arm64.deb"
+                binary="heimdall-${tag}-arm64.deb"
+                profile="heimdall-${profileInfo}-arm64.deb"
             else
                 binary="heimdall_${tag}_linux_arm64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdall_${tag}_arm64.rpm"
-                profile="heimdall_${profileInfo}_profile_arm64.rpm"
+                binary="heimdall-${tag}-arm64.rpm"
+                profile="heimdall-${profileInfo}-arm64.rpm"
             else
                 binary="heimdall_${tag}_linux_arm64.rpm"
             fi
