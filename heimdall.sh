@@ -92,62 +92,62 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-${tag}-amd64.deb"
+                binary="heimdalld-v${tag}-amd64.deb"
                 profile="heimdalld-${profileInfo}-amd64.deb"
             else
-                binary="heimdalld_${tag}_linux_amd64.deb"
+                binary="heimdalld_v${tag}_linux_amd64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-${tag}-amd64.rpm"
+                binary="heimdalld-v${tag}-amd64.rpm"
                 profile="heimdalld-${profileInfo}-amd64.rpm"
             else
-                binary="heimdalld_${tag}_linux_amd64.rpm"
+                binary="heimdalld_v${tag}_linux_amd64.rpm"
             fi
         elif command -v apk &> /dev/null; then
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="apk"
-            binary="heimdall_${tag}_linux_amd64.apk"
+            binary="heimdall_v${tag}_linux_amd64.apk"
         else
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="tar.gz"
-            binary="heimdalld_${tag}_linux_amd64.tar.gz"
+            binary="heimdalld_v${tag}_linux_amd64.tar.gz"
         fi
         ;;
     Linux.aarch64)
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-${tag}-arm64.deb"
+                binary="heimdalld-v${tag}-arm64.deb"
                 profile="heimdalld-${profileInfo}-arm64.deb"
             else
-                binary="heimdalld_${tag}_linux_arm64.deb"
+                binary="heimdalld_v${tag}_linux_arm64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-${tag}-arm64.rpm"
+                binary="heimdalld-v${tag}-arm64.rpm"
                 profile="heimdalld-${profileInfo}-arm64.rpm"
             else
-                binary="heimdalld_${tag}_linux_arm64.rpm"
+                binary="heimdalld_v${tag}_linux_arm64.rpm"
             fi
         elif command -v apk &> /dev/null; then
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="apk"
-            binary="heimdalld_${tag}_linux_arm64.apk"
+            binary="heimdalld_v${tag}_linux_arm64.apk"
         else
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="tar.gz"
-            binary="heimdalld_${tag}_linux_arm64.tar.gz"
+            binary="heimdalld_v${tag}_linux_arm64.tar.gz"
         fi
         ;;
     Darwin.x86_64)
@@ -155,14 +155,14 @@ case "$(uname -s).$(uname -m)" in
                 oops "sorry, there is no binary distribution for your platform"
             fi
         type="tar.gz"
-        binary="heimdalld_${tag}_darwin_amd64.tar.gz"
+        binary="heimdalld_v${tag}_darwin_amd64.tar.gz"
         ;;
     Darwin.arm64|Darwin.aarch64)
         if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
         type="tar.gz"
-        binary="heimdalld_${tag}_darwin_arm64.tar.gz"
+        binary="heimdalld_v${tag}_darwin_arm64.tar.gz"
         ;;
     *) oops "sorry, there is no binary distribution for your platform";;
 esac
