@@ -22,7 +22,7 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-version="0.2.11"
+version="0.3.0"
 newCLIVersion="0.3.0"
 network="mainnet"
 nodetype="sentry"
@@ -202,15 +202,19 @@ if [ $type = "tar.gz" ]; then
         sudo cp "${unpack}/bridge" /usr/local/bin/bridge || oops "failed to copy bridge binary to '/usr/local/bin/bridge'"
     fi
 elif [ $type = "deb" ]; then
+    echo "Uninstalling any existing old binary ..."
+    sudo dpkg -r heimdall
     echo "Installing $package ..."
     sudo dpkg -i $package
-    if [ ! -z "$profilePackage" ]; then
+    if [ ! -z "$profilePackage" ] && [ ! -d /var/lib/heimdall/config ]; then
         sudo dpkg -i $profilePackage
     fi
 elif [ $type = "rpm" ]; then
+    echo "Uninstalling any existing old binary ..."
+    sudo rpm -e heimdall
     echo "Installing $package ..."
     sudo rpm -i --force $package
-    if [ ! -z "$profilePackage" ]; then
+    if [ ! -z "$profilePackage" ] && [ ! -d /var/lib/heimdall/config ]; then
         sudo rpm -i --force $profilePackage
     fi
 elif [ $type = "apk" ]; then
