@@ -22,7 +22,7 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-version="0.2.17"
+version="0.3.0"
 network="mainnet"
 nodetype="sentry"
 
@@ -197,15 +197,19 @@ if [ $type = "tar.gz" ]; then
     tar -xzf "$package" -C "$unpack" || oops "failed to unpack '$package'"
     sudo cp "${unpack}/bor" /usr/local/bin/bor || oops "failed to copy bor binary to '/usr/local/bin/bor'"
 elif [ $type = "deb" ]; then
+    echo "Uninstalling any existing old binary ..."
+    sudo dpkg -r bor
     echo "Installing $package ..."
     sudo dpkg -i $package
-    if [ ! -z "$profilePackage" ]; then
+    if [ ! -z "$profilePackage" ] && [ ! -f /var/lib/bor/config.toml ]; then
         sudo dpkg -i $profilePackage
     fi
 elif [ $type = "rpm" ]; then
+    echo "Uninstalling any existing old binary ..."
+    sudo rpm -e bor
     echo "Installing $package ..."
     sudo rpm -i --force $package
-    if [ ! -z "$profilePackage" ]; then
+    if [ ! -z "$profilePackage" ] && [ ! -f /var/lib/bor/config.toml ]; then
         sudo rpm -i --force $profilePackage
     fi
 elif [ $type = "apk" ]; then
