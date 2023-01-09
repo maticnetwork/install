@@ -229,7 +229,7 @@ if [ "$version" \< "$newCLIVersion" ]; then
     bridge version || oops "something went wrong"
 fi
 echo "Checking heimdalld version ..."
-heimdalld version || oops "something went wrong"
+/usr/bin/heimdalld version || oops "something went wrong"
 
 echo "heimdall has been installed successfully!"
 
