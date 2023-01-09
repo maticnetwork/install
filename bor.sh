@@ -218,7 +218,7 @@ elif [ $type = "apk" ]; then
 fi
 
 echo "Checking bor version ..."
-bor version || oops "something went wrong"
+/usr/bin/bor version || oops "something went wrong"
 echo "bor has been installed successfully!"
 
 } # End of wrapping
