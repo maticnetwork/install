@@ -208,7 +208,7 @@ elif [ $type = "deb" ]; then
     sudo dpkg -r heimdalld
     echo "Installing $package ..."
     sudo dpkg -i $package
-    if [ ! -z "$profilePackage" ] && [ ! -d /var/lib/heimdall/config ]; then
+    if [ ! -z "$profilePackage" ] && sudo [ ! -d /var/lib/heimdall/config ]; then
         sudo dpkg -i $profilePackage
     fi
 elif [ $type = "rpm" ]; then
@@ -216,7 +216,7 @@ elif [ $type = "rpm" ]; then
     sudo rpm -e heimdall
     echo "Installing $package ..."
     sudo rpm -i --force $package
-    if [ ! -z "$profilePackage" ] && [ ! -d /var/lib/heimdall/config ]; then
+    if [ ! -z "$profilePackage" ] && sudo [ ! -d /var/lib/heimdall/config ]; then
         sudo rpm -i --force $profilePackage
     fi
 elif [ $type = "apk" ]; then

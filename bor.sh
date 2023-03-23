@@ -201,7 +201,7 @@ elif [ $type = "deb" ]; then
     sudo dpkg -r bor
     echo "Installing $package ..."
     sudo dpkg -i $package
-    if [ ! -z "$profilePackage" ] && [ ! -f /var/lib/bor/config.toml ]; then
+    if [ ! -z "$profilePackage" ] && sudo [ ! -f /var/lib/bor/config.toml ]; then
         sudo dpkg -i $profilePackage
     fi
 elif [ $type = "rpm" ]; then
@@ -209,7 +209,7 @@ elif [ $type = "rpm" ]; then
     sudo rpm -e bor
     echo "Installing $package ..."
     sudo rpm -i --force $package
-    if [ ! -z "$profilePackage" ] && [ ! -f /var/lib/bor/config.toml ]; then
+    if [ ! -z "$profilePackage" ] && sudo [ ! -f /var/lib/bor/config.toml ]; then
         sudo rpm -i --force $profilePackage
     fi
 elif [ $type = "apk" ]; then
