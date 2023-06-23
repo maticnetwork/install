@@ -71,6 +71,8 @@ if [ ! -z "$3" ]; then
         nodetype="$3"
     elif [ "$3" = "archive" ]; then
         echo "No option of archive node type in heimdall. Using default mode: $nodetype"
+    elif [ "$3" = "bootnode" ]; then
+        echo "No option of bootnode type in heimdall. Using default mode: $nodetype"
     else
         echo "Invalid node type: $3, choose from 'sentry' or 'validator'"
         exit 1
