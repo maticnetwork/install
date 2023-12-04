@@ -57,10 +57,10 @@ if [ ! -z "$1" ]; then
 fi
 
 if [ ! -z "$2" ]; then
-    if [ "$2" = "mainnet" ] || [ "$2" = "mumbai" ]; then
+    if [ "$2" = "mainnet" ] || [ "$2" = "mumbai" ] || [ "$2" = "amoy" ]; then
         network="$2"
     else
-        echo "Invalid network: $2, choose from 'mainnet' or 'mumbai'"
+        echo "Invalid network: $2, choose from 'mainnet' or 'mumbai' or 'amoy'"
         exit 1
     fi
 fi
