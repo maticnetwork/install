@@ -58,10 +58,10 @@ if [ ! -z "$1" ]; then
 fi
 
 if [ ! -z "$2" ]; then
-    if [ "$2" = "mainnet" ] || [ "$2" = "mumbai" ] || [ "$2" = "amoy" ]; then
+    if [ "$2" = "mainnet" ] || [ "$2" = "amoy" ]; then
         network="$2"
     else
-        echo "Invalid network: $2, choose from 'mainnet' or 'mumbai' or 'amoy'"
+        echo "Invalid network: $2, choose from 'mainnet' or 'amoy'"
         exit 1
     fi
 fi
@@ -97,15 +97,15 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="heimdalld-v${tag}-amd64.deb"
-                profile="heimdalld-${profileInfo}-amd64.deb"
+                profile="heimdalld-${profileInfo}-all.deb"
             else
                 binary="heimdalld_v${tag}_linux_amd64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-amd64.rpm"
-                profile="heimdalld-${profileInfo}-amd64.rpm"
+                binary="heimdalld-v${tag}.x86_64.rpm"
+                profile="heimdalld-${profileInfo}.noarch.rpm"
             else
                 binary="heimdalld_v${tag}_linux_amd64.rpm"
             fi
@@ -128,15 +128,15 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="heimdalld-v${tag}-arm64.deb"
-                profile="heimdalld-${profileInfo}-arm64.deb"
+                profile="heimdalld-${profileInfo}-all.deb"
             else
                 binary="heimdalld_v${tag}_linux_arm64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-arm64.rpm"
-                profile="heimdalld-${profileInfo}-arm64.rpm"
+                binary="heimdalld-v${tag}.aarch64.rpm"
+                profile="heimdalld-${profileInfo}.noarch.rpm"
             else
                 binary="heimdalld_v${tag}_linux_arm64.rpm"
             fi
