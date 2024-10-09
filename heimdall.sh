@@ -96,18 +96,18 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-amd64.deb"
-                profile="heimdalld-${profileInfo}-all.deb"
+                binary="heimdall-v${tag}-amd64.deb"
+                profile="heimdall-${profileInfo}-all.deb"
             else
-                binary="heimdalld_v${tag}_linux_amd64.deb"
+                binary="heimdall_v${tag}_linux_amd64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}.x86_64.rpm"
-                profile="heimdalld-${profileInfo}.noarch.rpm"
+                binary="heimdall-v${tag}.x86_64.rpm"
+                profile="heimdall-${profileInfo}.noarch.rpm"
             else
-                binary="heimdalld_v${tag}_linux_amd64.rpm"
+                binary="heimdall_v${tag}_linux_amd64.rpm"
             fi
         elif command -v apk &> /dev/null; then
             if [[ $version > "0.3" ]]; then
@@ -127,25 +127,25 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-arm64.deb"
-                profile="heimdalld-${profileInfo}-all.deb"
+                binary="heimdall-v${tag}-arm64.deb"
+                profile="heimdall-${profileInfo}-all.deb"
             else
-                binary="heimdalld_v${tag}_linux_arm64.deb"
+                binary="heimdall_v${tag}_linux_arm64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}.aarch64.rpm"
-                profile="heimdalld-${profileInfo}.noarch.rpm"
+                binary="heimdall-v${tag}.aarch64.rpm"
+                profile="heimdall-${profileInfo}.noarch.rpm"
             else
-                binary="heimdalld_v${tag}_linux_arm64.rpm"
+                binary="heimdall_v${tag}_linux_arm64.rpm"
             fi
         elif command -v apk &> /dev/null; then
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="apk"
-            binary="heimdalld_v${tag}_linux_arm64.apk"
+            binary="heimdall_v${tag}_linux_arm64.apk"
         else
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
