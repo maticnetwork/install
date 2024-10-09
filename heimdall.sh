@@ -58,10 +58,10 @@ if [ ! -z "$1" ]; then
 fi
 
 if [ ! -z "$2" ]; then
-    if [ "$2" = "mainnet" ] || [ "$2" = "mumbai" ] || [ "$2" = "amoy" ]; then
+    if [ "$2" = "mainnet" ] || [ "$2" = "amoy" ]; then
         network="$2"
     else
-        echo "Invalid network: $2, choose from 'mainnet' or 'mumbai' or 'amoy'"
+        echo "Invalid network: $2, choose from 'mainnet' or 'amoy'"
         exit 1
     fi
 fi
@@ -82,6 +82,7 @@ fi
 if [[ $version > "0.3" ]]; then
     tag=${version}
     profileInfo=${network}-${nodetype}-config_v${version}
+    profileInforpm=${network}-${nodetype}-config-v${version}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -96,18 +97,18 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-amd64.deb"
-                profile="heimdalld-${profileInfo}-amd64.deb"
+                binary="heimdall-v${tag}-amd64.deb"
+                profile="heimdall-${profileInfo}-all.deb"
             else
-                binary="heimdalld_v${tag}_linux_amd64.deb"
+                binary="heimdall_v${tag}_linux_amd64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-amd64.rpm"
-                profile="heimdalld-${profileInfo}-amd64.rpm"
+                binary="heimdall-v${tag}.x86_64.rpm"
+                profile="heimdall-${profileInforpm}.noarch.rpm"
             else
-                binary="heimdalld_v${tag}_linux_amd64.rpm"
+                binary="heimdall_v${tag}_linux_amd64.rpm"
             fi
         elif command -v apk &> /dev/null; then
             if [[ $version > "0.3" ]]; then
@@ -127,25 +128,25 @@ case "$(uname -s).$(uname -m)" in
         if command -v dpkg &> /dev/null; then
             type="deb"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-arm64.deb"
-                profile="heimdalld-${profileInfo}-arm64.deb"
+                binary="heimdall-v${tag}-arm64.deb"
+                profile="heimdall-${profileInfo}-all.deb"
             else
-                binary="heimdalld_v${tag}_linux_arm64.deb"
+                binary="heimdall_v${tag}_linux_arm64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="heimdalld-v${tag}-arm64.rpm"
-                profile="heimdalld-${profileInfo}-arm64.rpm"
+                binary="heimdall-v${tag}.aarch64.rpm"
+                profile="heimdall-${profileInforpm}.noarch.rpm"
             else
-                binary="heimdalld_v${tag}_linux_arm64.rpm"
+                binary="heimdall_v${tag}_linux_arm64.rpm"
             fi
         elif command -v apk &> /dev/null; then
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="apk"
-            binary="heimdalld_v${tag}_linux_arm64.apk"
+            binary="heimdall_v${tag}_linux_arm64.apk"
         else
             if [[ $version > "0.3" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
