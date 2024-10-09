@@ -82,6 +82,7 @@ fi
 if [[ $version > "0.3" ]]; then
     tag=${version}
     profileInfo=${network}-${nodetype}-config_v${version}
+    profileInforpm=${network}-${nodetype}-config-v${version}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -105,7 +106,7 @@ case "$(uname -s).$(uname -m)" in
             type="rpm"
             if [[ $version > "0.3" ]]; then
                 binary="heimdall-v${tag}.x86_64.rpm"
-                profile="heimdall-${profileInfo}.noarch.rpm"
+                profile="heimdall-${profileInforpm}.noarch.rpm"
             else
                 binary="heimdall_v${tag}_linux_amd64.rpm"
             fi
@@ -136,7 +137,7 @@ case "$(uname -s).$(uname -m)" in
             type="rpm"
             if [[ $version > "0.3" ]]; then
                 binary="heimdall-v${tag}.aarch64.rpm"
-                profile="heimdall-${profileInfo}.noarch.rpm"
+                profile="heimdall-${profileInforpm}.noarch.rpm"
             else
                 binary="heimdall_v${tag}_linux_arm64.rpm"
             fi
