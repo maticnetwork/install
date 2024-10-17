@@ -208,7 +208,7 @@ if [ $type = "tar.gz" ]; then
     fi
 elif [ $type = "deb" ]; then
     echo "Uninstalling any existing old binary ..."
-    sudo dpkg -r heimdalld
+    sudo dpkg -r heimdall
     echo "Installing $package ..."
     sudo dpkg -i $package
     if [ ! -z "$profilePackage" ] && sudo [ ! -d /var/lib/heimdall/config ]; then
