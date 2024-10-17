@@ -27,6 +27,13 @@ Simply pass the version tag as the first argument to the installation script. No
 ./bor.sh 0.2.14-tmp-span-hotfix
 ```
 
+#### Installing PBSS profiles
+```shell
+./bor.sh $version $network pbss-$network-$type
+```
+Where $version is desired version, $network is mainnet or amoy, and $type is defined as sentry or validator as PBSS does not support bootnode or archive.
+
+
 
 ### Heimdall
 

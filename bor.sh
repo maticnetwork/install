@@ -57,19 +57,19 @@ if [ ! -z "$1" ]; then
 fi
 
 if [ ! -z "$2" ]; then
-    if [ "$2" = "mainnet" ] || [ "$2" = "mumbai" ] || [ "$2" = "amoy" ]; then
+    if [ "$2" = "mainnet" ] || [ "$2" = "amoy" ]; then
         network="$2"
     else
-        echo "Invalid network: $2, choose from 'mainnet' or 'mumbai' or 'amoy'"
+        echo "Invalid network: $2, choose from 'mainnet' or 'amoy'"
         exit 1
     fi
 fi
 
 if [ ! -z "$3" ]; then
-    if [ "$3" = "sentry" ] || [ "$3" = "validator" ] || [ "$3" = "archive" ] || [ "$3" = "bootnode" ]; then
+    if [ "$3" = "sentry" ] || [ "$3" = "pbss-$2-sentry" ] || [ "$3" = "validator" ] || [ "$3" = "pbss-$2-validator" ] || [ "$3" = "archive" ] || [ "$3" = "bootnode" ]; then
         nodetype="$3"
     else
-        echo "Invalid node type: $3, choose from 'sentry', 'validator', 'archive',  or 'bootnode'"
+        echo "Invalid node type: $3, choose from 'sentry', 'pbss-$2-sentry', 'validator', 'pbss-$2-validator', 'archive',  or 'bootnode'"
         exit 1
     fi
 fi
@@ -77,6 +77,7 @@ fi
 if [[ $version > "0.3" ]]; then
     tag=v${version}
     profileInfo=${network}-${nodetype}-config_v${version}
+    profileInforpm=${network}-${nodetype}-config-v${version}
 else
     echo "Version is less than 0.3, ignoring network and node type"
     tag=${version}
@@ -92,15 +93,15 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="bor-${tag}-amd64.deb"
-                profile="bor-${profileInfo}-amd64.deb"
+                profile="bor-${profileInfo}-all.deb"
             else
                 binary="bor_${tag}_linux_amd64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="bor-${tag}-amd64.rpm"
-                profile="bor-${profileInfo}-amd64.rpm"
+                binary="bor-${tag}.x86_64.rpm"
+                profile="bor-${profileInforpm}.noarch.rpm"
             else
                 binary="bor_${tag}_linux_amd64.rpm"
             fi
@@ -123,15 +124,15 @@ case "$(uname -s).$(uname -m)" in
             type="deb"
             if [[ $version > "0.3" ]]; then
                 binary="bor-${tag}-arm64.deb"
-                profile="bor-${profileInfo}-arm64.deb"
+                profile="bor-${profileInfo}-all.deb"
             else
                 binary="bor_${tag}_linux_arm64.deb"
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
             if [[ $version > "0.3" ]]; then
-                binary="bor-${tag}-arm64.rpm"
-                profile="bor-${profileInfo}-arm64.rpm"
+                binary="bor-${tag}.aarch64.rpm"
+                profile="bor-${profileInforpm}.noarch.rpm"
             else
                 binary="bor_${tag}_linux_arm64.rpm"
             fi
