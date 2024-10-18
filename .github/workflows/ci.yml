@@ -1,5 +1,6 @@
 name: CI
 
+
 on:
   push:
     branches: ["main"]
@@ -10,19 +11,18 @@ on:
 jobs:
   install_aarch64:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     name: Install on ${{ matrix.distro }} ${{ matrix.arch }}
     strategy:
       matrix:
         include:
           - arch: aarch64
             distro: ubuntu_latest
-          - arch: aarch64
-            distro: alpine_latest
-          - arch: aarch64
-            distro: fedora_latest
+            base_image: latest
+            platform: linux/amd64,linux/arm64
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Install binary
         with:
@@ -31,17 +31,9 @@ jobs:
 
           install: |
             case "${{ matrix.distro }}" in
-              ubuntu*|jessie|stretch|buster|bullseye)
+              ubuntu*|ubuntu22.04)
                 apt-get update -q -y
-                apt-get install -q -y wget sudo bash
-                ;;
-              fedora*)
-                dnf -y update
-                dnf -y install wget sudo bash
-                ;;
-              alpine*)
-                apk update
-                apk add wget sudo bash
+                apt-get install -q -y wget sudo bash adduser systemctl
                 ;;
             esac
 
@@ -50,21 +42,19 @@ jobs:
             --volume "${PWD}:/artifacts"
 
           run: |
-            bash /artifacts/bor.sh
-            bash /artifacts/bor.sh 0.2.17
-            bash /artifacts/heimdall.sh
-            bash /artifacts/heimdall.sh 0.2.11
+            bash /artifacts/bor.sh v1.4.0 amoy sentry
+            bash /artifacts/heimdall.sh v1.0.10 amoy sentry
 
   install_amd64:
     runs-on: ${{ matrix.os }}
     name: Install on ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install binary
         run: |
-          ./bor.sh 0.2.17
-          ./heimdall.sh 0.2.11
+          ./bor.sh v1.4.0 amoy sentry
+          ./heimdall.sh v1.0.10 amoy sentry
