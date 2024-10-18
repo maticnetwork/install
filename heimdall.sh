@@ -22,8 +22,8 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-version="0.3.0"
-newCLIVersion="0.3.0"
+version="1.0.10"
+newCLIVersion="1.0.10"
 network="mainnet"
 nodetype="sentry"
 
@@ -209,6 +209,7 @@ if [ $type = "tar.gz" ]; then
 elif [ $type = "deb" ]; then
     echo "Uninstalling any existing old binary ..."
     sudo dpkg -r heimdall
+    sudo dpkg -r heimdalld
     echo "Installing $package ..."
     sudo dpkg -i $package
     if [ ! -z "$profilePackage" ] && sudo [ ! -d /var/lib/heimdall/config ]; then
