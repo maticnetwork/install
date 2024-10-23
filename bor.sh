@@ -22,7 +22,7 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-version="0.3.0"
+version="1.5.0"
 network="mainnet"
 nodetype="sentry"
 
