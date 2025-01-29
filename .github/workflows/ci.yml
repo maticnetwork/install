@@ -40,15 +40,13 @@ jobs:
           # Mount the root directory as /artifacts in the container
           dockerRunArgs: |
             --volume "${PWD}:/artifacts"
-          # Existing version
           run: |
+            # Existing Version
             bash /artifacts/bor.sh v1.5.4 amoy sentry
             bash /artifacts/heimdall.sh v1.2.0 amoy sentry
-          # New Version
-      - name: new version test of install/removal (arm64/aarch64)
-        run: |
-          bash /artifacts/bor.sh v1.5.4 amoy sentry
-          bash /artifacts/heimdall.sh v1.2.0 amoy sentry
+            # New Version
+            bash /artifacts/bor.sh v1.5.4 amoy sentry
+            bash /artifacts/heimdall.sh v1.2.0 amoy sentry
 
   install_amd64:
     runs-on: ${{ matrix.os }}
