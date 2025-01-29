@@ -42,8 +42,8 @@ jobs:
             --volume "${PWD}:/artifacts"
 
           run: |
-            bash /artifacts/bor.sh v1.5.3 amoy sentry
-            bash /artifacts/heimdall.sh v1.0.10 amoy sentry
+            bash /artifacts/bor.sh v1.5.4 amoy sentry
+            bash /artifacts/heimdall.sh v1.2.0 amoy sentry
 
   install_amd64:
     runs-on: ${{ matrix.os }}
@@ -56,5 +56,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install binary
         run: |
-          ./bor.sh v1.5.3 amoy sentry
-          ./heimdall.sh v1.0.10 amoy sentry
+          ./bor.sh v1.5.4 amoy sentry
+          ./heimdall.sh v1.2.0 amoy sentry
