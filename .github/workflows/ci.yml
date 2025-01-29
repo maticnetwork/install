@@ -59,11 +59,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        # Existing version
       - name: Install binary(amd64/x86)
         run: |
           ./bor.sh v1.5.4 amoy sentry
           ./heimdall.sh v1.2.0 amoy sentry
-
+        # New version
       - name: Install binary and test removal(amd64/x86)
         run: |
           ./bor.sh v1.5.4 amoy sentry
