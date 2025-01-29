@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
-        name: Install binary
+        name: Install binary (arm64/aarch64 install)
         with:
           arch: ${{ matrix.arch }}
           distro: ${{ matrix.distro }}
@@ -40,10 +40,15 @@ jobs:
           # Mount the root directory as /artifacts in the container
           dockerRunArgs: |
             --volume "${PWD}:/artifacts"
-
+          # Existing version
           run: |
             bash /artifacts/bor.sh v1.5.4 amoy sentry
             bash /artifacts/heimdall.sh v1.2.0 amoy sentry
+          # New Version
+      - name: new version test of install/removal (arm64/aarch64)
+        run: |
+          bash /artifacts/bor.sh v1.5.4 amoy sentry
+          bash /artifacts/heimdall.sh v1.2.0 amoy sentry
 
   install_amd64:
     runs-on: ${{ matrix.os }}
@@ -54,7 +59,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Install binary
+      - name: Install binary(amd64/x86)
+        run: |
+          ./bor.sh v1.5.4 amoy sentry
+          ./heimdall.sh v1.2.0 amoy sentry
+
+      - name: Install binary and test removal(amd64/x86)
         run: |
           ./bor.sh v1.5.4 amoy sentry
           ./heimdall.sh v1.2.0 amoy sentry
