@@ -45,7 +45,7 @@ jobs:
             bash /artifacts/bor.sh v1.5.4 amoy sentry
             bash /artifacts/heimdall.sh v1.2.0 amoy sentry
             # New Version
-            bash /artifacts/bor.sh v1.5.4 amoy sentry
+            bash /artifacts/bor.sh v1.5.5 amoy sentry
             bash /artifacts/heimdall.sh v1.2.0 amoy sentry
 
   install_amd64:
@@ -65,5 +65,5 @@ jobs:
         # New version
       - name: Install binary and test removal(amd64/x86)
         run: |
-          ./bor.sh v1.5.4 amoy sentry
+          ./bor.sh v1.5.5 amoy sentry
           ./heimdall.sh v1.2.0 amoy sentry
