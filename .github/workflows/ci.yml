@@ -42,10 +42,10 @@ jobs:
             --volume "${PWD}:/artifacts"
           run: |
             # Existing Version
-            bash /artifacts/bor.sh v1.5.5 amoy sentry
+            bash /artifacts/bor.sh v2.0.0-beta amoy sentry
             bash /artifacts/heimdall.sh v1.2.0 amoy sentry
             # New Version
-            bash /artifacts/bor.sh v2.0.0-beta amoy sentry
+            bash /artifacts/bor.sh v2.0.0-beta2 amoy sentry
             bash /artifacts/heimdall.sh v1.2.0 amoy sentry
 
   install_amd64:
@@ -60,10 +60,10 @@ jobs:
         # Existing version
       - name: Install binary(amd64/x86)
         run: |
-          ./bor.sh v1.5.5 amoy sentry
+          ./bor.sh v2.0.0-beta amoy sentry
           ./heimdall.sh v1.2.0 amoy sentry
         # New version
       - name: Install binary and test removal(amd64/x86)
         run: |
-          ./bor.sh v2.0.0-beta amoy sentry
+          ./bor.sh v2.0.0-beta2 amoy sentry
           ./heimdall.sh v1.2.0 amoy sentry
