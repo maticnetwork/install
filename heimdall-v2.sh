@@ -82,7 +82,7 @@ tag=${version}
 profileInfo=${network}-${nodetype}-config_v${version}
 profileInforpm=${network}-${nodetype}-config-v${version}
 
-baseUrl="https://github.com/maticnetwork/heimdall/releases/download/v${version}"
+baseUrl="https://github.com/0xPolygon/heimdall-v2/releases/download/v${version}"
 
 echo $baseUrl
 
