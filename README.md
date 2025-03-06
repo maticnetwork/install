@@ -34,25 +34,6 @@ Simply pass the version tag as the first argument to the installation script. No
 Where $version is desired version, $network is mainnet or amoy, and $type is defined as sentry or validator as PBSS does not support bootnode or archive.
 
 
-
-### Heimdall
-
-#### Install default Heimdall binary
-
-```
-./heimdall.sh
-```
-
-#### Install a specific Heimdall version
-
-Simply pass the version tag as the first argument to the installation script. Notice that the script will overwrite existing Heimdall binaries if they exist. Example:
-
-```
-./heimdall.sh 0.2.19
-```
-
-
-
 ### Heimdall-v2
 
 #### Install default Heimdall-v2 binary
@@ -66,5 +47,5 @@ Simply pass the version tag as the first argument to the installation script. No
 Simply pass the version tag as the first argument to the installation script. Notice that the script will overwrite existing Heimdall-v2 binaries if they exist. Example:
 
 ```
-./heimdall-v2.sh 0.2.19
+./heimdall-v2.sh 0.1.6
 ```
