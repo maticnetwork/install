@@ -46,7 +46,7 @@ jobs:
             bash /artifacts/heimdall.sh v1.2.0 amoy sentry
             # New Version
             bash /artifacts/bor.sh v2.0.1 amoy sentry
-            bash /artifacts/heimdall.sh v1.2.0 amoy sentry
+            bash /artifacts/heimdall.sh v1.2.1 amoy sentry
 
   install_amd64:
     runs-on: ${{ matrix.os }}
@@ -66,4 +66,4 @@ jobs:
       - name: Install binary and test removal(amd64/x86)
         run: |
           ./bor.sh v2.0.1 amoy sentry
-          ./heimdall.sh v1.2.0 amoy sentry
+          ./heimdall.sh v1.2.1 amoy sentry
