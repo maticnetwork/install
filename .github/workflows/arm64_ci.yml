@@ -20,7 +20,7 @@ jobs:
           ./bor.sh v2.0.1 amoy sentry
           ./heimdall.sh v1.2.0 amoy sentry
         # New version
-      - name: Install binary and test removal(amd64/x86)
+      - name: Install binary and test removal(arm64)
         run: |
           ./bor.sh v2.0.2-beta amoy sentry
           ./heimdall.sh v1.2.1 amoy sentry
