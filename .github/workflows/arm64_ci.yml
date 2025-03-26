@@ -1,0 +1,26 @@
+name: arm_ci_install.yml
+
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, edited, synchronize]
+
+jobs:
+  install_arm64:
+    runs-on:
+      labels: arm-runner-2204
+    steps:
+      - uses: actions/checkout@v4
+        # Existing version
+      - name: Install binary(amd64/x86)
+        run: |
+          ./install/bor.sh v2.0.1 amoy sentry
+          ./install/heimdall.sh v1.2.0 amoy sentry
+        # New version
+      - name: Install binary and test removal(amd64/x86)
+        run: |
+          ./install/bor.sh v2.0.2-beta amoy sentry
+          ./install/heimdall.sh v1.2.1 amoy sentry
