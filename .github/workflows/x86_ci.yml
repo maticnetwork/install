@@ -16,10 +16,10 @@ jobs:
         # Existing version
       - name: Install binary(amd64/x86)
         run: |
-          ./bor.sh v2.0.1 amoy sentry
+          ./bor.sh v2.0.2-beta amoy sentry
           ./heimdall.sh v1.2.2 amoy sentry
         # New version
       - name: Install binary and test removal(amd64/x86)
         run: |
-          ./bor.sh v2.0.2-beta amoy sentry
+          ./bor.sh v2.0.3 amoy sentry
           ./heimdall.sh v1.2.3 amoy sentry
