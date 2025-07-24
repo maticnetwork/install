@@ -22,8 +22,8 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-version="1.0.10"
-newCLIVersion="1.0.10"
+version="0.2.14"
+newCLIVersion="0.2.14"
 network="mainnet"
 nodetype="sentry"
 
@@ -79,12 +79,12 @@ if [ ! -z "$3" ]; then
     fi
 fi
 
-if [[ $version > "0.3" ]]; then
+if [[ $version > "0.1" ]]; then
     tag=${version}
     profileInfo=${network}-${nodetype}-config_v${version}
     profileInforpm=${network}-${nodetype}-config-v${version}
 else
-    echo "Version is less than 0.3, ignoring network and node type"
+    echo "Version is less than 0.1, ignoring network and node type"
     tag=${version}
 fi
 
