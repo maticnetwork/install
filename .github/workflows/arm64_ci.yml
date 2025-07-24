@@ -18,9 +18,9 @@ jobs:
       - name: Install binary(arm64)
         run: |
           ./bor.sh v2.2.0-beta amoy sentry
-          ./heimdall.sh v1.2.3 amoy sentry
+          ./heimdall.sh v0.2.14 amoy sentry
         # New version
       - name: Install binary and test removal(arm64)
         run: |
           ./bor.sh v2.2.1-beta amoy sentry
-          ./heimdall.sh v1.6.0-beta amoy sentry
+          ./heimdall.sh v0.2.14 amoy sentry
