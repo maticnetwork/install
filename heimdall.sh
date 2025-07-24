@@ -88,7 +88,7 @@ else
     tag=${version}
 fi
 
-baseUrl="https://github.com/maticnetwork/heimdall/releases/download/v${version}"
+baseUrl="https://github.com/0xPolygon/heimdall-v2/releases/download/v${version}"
 
 echo $baseUrl
 
@@ -96,7 +96,7 @@ case "$(uname -s).$(uname -m)" in
     Linux.x86_64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 binary="heimdall-v${tag}-amd64.deb"
                 profile="heimdall-${profileInfo}-all.deb"
             else
@@ -104,20 +104,20 @@ case "$(uname -s).$(uname -m)" in
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 binary="heimdall-v${tag}.x86_64.rpm"
                 profile="heimdall-${profileInforpm}.noarch.rpm"
             else
                 binary="heimdall_v${tag}_linux_amd64.rpm"
             fi
         elif command -v apk &> /dev/null; then
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="apk"
             binary="heimdall_v${tag}_linux_amd64.apk"
         else
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="tar.gz"
@@ -127,7 +127,7 @@ case "$(uname -s).$(uname -m)" in
     Linux.aarch64)
         if command -v dpkg &> /dev/null; then
             type="deb"
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 binary="heimdall-v${tag}-arm64.deb"
                 profile="heimdall-${profileInfo}-all.deb"
             else
@@ -135,20 +135,20 @@ case "$(uname -s).$(uname -m)" in
             fi
         elif command -v rpm &> /dev/null; then
             type="rpm"
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 binary="heimdall-v${tag}.aarch64.rpm"
                 profile="heimdall-${profileInforpm}.noarch.rpm"
             else
                 binary="heimdall_v${tag}_linux_arm64.rpm"
             fi
         elif command -v apk &> /dev/null; then
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="apk"
             binary="heimdall_v${tag}_linux_arm64.apk"
         else
-            if [[ $version > "0.3" ]]; then
+            if [[ $version > "0.1" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
             type="tar.gz"
@@ -156,14 +156,14 @@ case "$(uname -s).$(uname -m)" in
         fi
         ;;
     Darwin.x86_64)
-        if [[ $version > "0.3" ]]; then
+        if [[ $version > "0.1" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
         type="tar.gz"
         binary="heimdalld_v${tag}_darwin_amd64.tar.gz"
         ;;
     Darwin.arm64|Darwin.aarch64)
-        if [[ $version > "0.3" ]]; then
+        if [[ $version > "0.1" ]]; then
                 oops "sorry, there is no binary distribution for your platform"
             fi
         type="tar.gz"
@@ -188,7 +188,7 @@ echo "downloading heimdall binary package for $system from '$url' to '$tmpDir'..
 fetch "$url" "$package" || oops "failed to download '$url'"
 
 # Check if profile is not empty
-if [ ! -z "$profile"  ] && [[ "$version" > "0.3" ]]; then
+if [ ! -z "$profile"  ] && [[ "$version" > "0.1" ]]; then
     profileUrl="${baseUrl}/${profile}"
     profilePackage=$tmpDir/$profile
 
@@ -202,7 +202,6 @@ if [ $type = "tar.gz" ]; then
     mkdir -p "$unpack"
     tar -xzf "$package" -C "$unpack" || oops "failed to unpack '$package'"
     sudo cp "${unpack}/heimdalld" /usr/local/bin/heimdalld || oops "failed to copy heimdalld binary to '/usr/local/bin/heimdalld'"
-    sudo cp "${unpack}/heimdallcli" /usr/local/bin/heimdallcli || oops "failed to copy heimdallcli binary to '/usr/local/bin/heimdallcli'"
     if [ "$version" \< "$newCLIVersion" ]; then
         sudo cp "${unpack}/bridge" /usr/local/bin/bridge || oops "failed to copy bridge binary to '/usr/local/bin/bridge'"
     fi
